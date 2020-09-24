@@ -1,8 +1,7 @@
+api_uri="https://universitytongji-my.sharepoint.cn/_api/v2.0/me"
+api_resource_id="00000003-0000-0ff1-ce00-000000000000"
 api_auth_url="https://login.chinacloudapi.cn/common/oauth2/token"
 api_discovery_url="https://universitytongji-my.sharepoint.cn/"
-api_uri="https://universitytongji-my.sharepoint.cn/_api/v2.0/me"
-api_resource_id="https://universitytongji-my.sharepoint.cn"
-api_discovery_id="00000003-0000-0ff1-ce00-000000000000"
 get_json_value="cut -d= -f2-"
 curl_opts="--silent --retry ${http_retries} --retry-delay 10 -g"
 
@@ -56,19 +55,8 @@ function urlencode() {
 # --- cURL calls --- #
 # ------------------ #
 function curl_discover_uri() {
-	local api_access_token=$(onedrive_acquire_access_token ${api_discovery_id}) 
-	exit_on_error
-
-	local api_parsed_json_result=$(curl \
-	    ${curl_opts} \
-	    --get \
-            --header "Authorization: Bearer ${api_access_token}" \
-            --header "Accept: application/json; odata.metadata=none" \
-	    --data-urlencode "\$select=serviceEndpointUri,serviceResourceId" \
-	    --data-urlencode "\$filter=capability eq 'MyFiles' and serviceApiVersion eq 'v2.0'" \
-	    "${api_discovery_url}" | "${json_parser}")
-	api_uri=$(echo "${api_parsed_json_result}" | grep "serviceEndpointUri" | ${get_json_value})
-	api_resource_id=$(echo "${api_parsed_json_result}" | grep "serviceResourceId" | ${get_json_value})
+	api_uri=$(echo "https://universitytongji-my.sharepoint.cn/_api/v2.0/me") #change {tenant} to yourcompany
+	api_resource_id=$(echo "https://universitytongji-my.sharepoint.cn/")    #change {tenant} to yourcompany
 }
 
 # $1=folder id
